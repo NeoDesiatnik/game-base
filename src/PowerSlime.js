@@ -1,6 +1,6 @@
-import Enemy from './Enemy'
+import Powerup from './Powerup'
 
-export default class Slime extends Enemy {
+export default class PowerSlime extends Powerup {
   constructor(game) {
     super(game)
     this.width = 48

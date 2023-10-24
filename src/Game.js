@@ -4,7 +4,7 @@ import InputHandler from './InputHandler.js'
 import Player from './Player.js'
 import UserInterface from './UserInterface.js'
 export default class Game {
-  constructor(width, height) {
+  constructor(width, height, canvasPosition) {
     this.width = width
     this.height = height
     this.input = new InputHandler(this)
@@ -14,12 +14,14 @@ export default class Game {
     this.gravity = 1
     this.debug = false
     this.gameTime = 0
+    this.canvasPosition = canvasPosition
 
     this.enemies = []
     this.enemyTimer = 0
     this.enemyInterval = 1000
+    this.powerups = []
     this.powerupTimer = 0
-    this.powerupInterval = 10
+    this.powerupInterval = 100
 
     this.player = new Player(this)
   }
@@ -32,10 +34,12 @@ export default class Game {
 
     if (this.enemyTimer > this.enemyInterval && !this.gameOver) {
       this.addEnemy()
+      this.addPowerup()
       this.enemyTimer = 0
     } else {
       this.enemyTimer += deltaTime
     }
+
     if (this.powerupTimer > this.powerupInterval && !this.gameOver) {
       this.addPowerup()
       this.powerupTimer = 0
@@ -66,7 +70,7 @@ export default class Game {
         }
       })
     })
-    this.enemies = this.enemies.filter((powerup) => !powerup.markedForDeletion)
+    this.powerups = this.powerups.filter((powerup) => !powerup.markedForDeletion)
     this.enemies = this.enemies.filter((enemy) => !enemy.markedForDeletion)
   }
 
@@ -74,12 +78,14 @@ export default class Game {
     this.ui.draw(context)
     this.player.draw(context)
     this.enemies.forEach((enemy) => enemy.draw(context))
+    this.powerups.forEach((powerup) => powerup.draw(context))
   }
 
   addEnemy() {
     this.enemies.push(new Slime(this))
   }
   addPowerup() {
+    console.log('powerup')
     this.powerups.push(new PowerSlime(this))
   }
 
