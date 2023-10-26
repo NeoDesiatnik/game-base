@@ -2,14 +2,10 @@ import Game from './Game'
 
 export function setup(canvas) {
   const ctx = canvas.getContext('2d')
-  canvas.width = 4000
-  canvas.height = 2000
+  canvas.width = 960
+  canvas.height = 540
 
-  const game = new Game(
-    canvas.width,
-    canvas.height,
-    canvas.getBoundingClientRect()
-  )
+  const game = new Game(canvas.width, canvas.height)
   let lastTime = 0
 
   const animate = (timeStamp) => {
