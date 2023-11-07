@@ -52,6 +52,10 @@ export default class Player {
     } else {
       this.speedX = 0
     }
+    
+    if (this.game.keys.includes('s')) {
+      this.y += 40
+    }
 
     if (this.jumpTimer <= this.jumpInterval) {
       this.jumpTimer += deltaTime
@@ -130,8 +134,10 @@ export default class Player {
       this.width,
       this.height
     )
+if (this.flip) {
+  context.restore()
 
-    context.restore()
+}
   }
 
   jump() {

@@ -2,19 +2,20 @@ import Slime from './Slime.js'
 import InputHandler from './InputHandler.js'
 import Player from './Player.js'
 import UserInterface from './UserInterface.js'
-import Camera from './Camera.js'
-import First from './levels/First.js'
+import Platform from './Platform.js'
+import Background from './Background.js'
+
 export default class Game {
   constructor(width, height) {
     this.width = width
     this.height = height
     this.input = new InputHandler(this)
     this.ui = new UserInterface(this)
+    this.background = new Background(this)
     this.keys = []
     this.gameOver = false
     this.gravity = 1
-    this.debug = true
-    this.pause = false
+    this.debug = false
     this.gameTime = 0
 
     this.enemies = []
@@ -22,54 +23,47 @@ export default class Game {
     this.enemyInterval = 1000
 
     this.player = new Player(this)
-    this.camera = new Camera(this, this.player.x, this.player.y, 0, 100)
 
-    this.ground = this.height - 100
+    this.ground = this.height - 82
 
-    this.level = new First(this)
+    this.platforms = [
+      new Platform(this, 0, this.ground, this.width, 100, 'transparent'),
+      new Platform(this, this.width - 200, 280, 200, 20, '#795548'),
+      new Platform(this, 200, 200, 300, 20, '#795548'),
+    ]
+
+    this.speed = 1
   }
 
   update(deltaTime) {
-    if (this.pause) return
     if (!this.gameOver) {
       this.gameTime += deltaTime
     }
 
-    let grounded = false
-    this.level.platforms.forEach((platform) => {
-      let direction = this.checkCollisionDirection(this.player, platform)
-      if (
-        direction === 'bottom' &&
-        this.player.x + this.player.width > platform.x &&
-        this.player.x < platform.x + platform.width
-      ) {
-        grounded = true
-        this.player.speedY = 0
-        this.player.y = platform.y - this.player.height + 1
-      }
+    this.background.update()
+    // this.background.layers[3].update()
 
+    this.player.update(deltaTime)
+
+    this.platforms.forEach((platform) => {
+      if (this.checkPlatformCollision(this.player, platform)) {
+        this.player.speedY = 0
+        this.player.y = platform.y - this.player.height
+        this.player.grounded = true
+      }
       this.enemies.forEach((enemy) => {
-        if (this.checkCollisionDirection(enemy, platform) === 'bottom') {
+        if (this.checkPlatformCollision(enemy, platform)) {
           enemy.speedY = 0
           enemy.y = platform.y - enemy.height
         }
       })
     })
 
-    this.player.grounded = grounded
-
-    this.player.update(deltaTime)
-    this.camera.update(this.player)
-
     if (this.enemyTimer > this.enemyInterval && !this.gameOver) {
       this.addEnemy()
       this.enemyTimer = 0
     } else {
       this.enemyTimer += deltaTime
-    }
-
-    if (this.checkCollision(this.player, this.level.goal)) {
-      this.gameOver = true
     }
 
     this.enemies.forEach((enemy) => {
@@ -88,13 +82,11 @@ export default class Game {
   }
 
   draw(context) {
-    // console.log(this.camera)
+    this.background.draw(context)
     this.ui.draw(context)
-    this.camera.apply(context)
-    this.level.draw(context)
+    this.platforms.forEach((platform) => platform.draw(context))
     this.player.draw(context)
     this.enemies.forEach((enemy) => enemy.draw(context))
-    this.camera.reset(context)
   }
 
   addEnemy() {
@@ -128,34 +120,6 @@ export default class Game {
         object.grounded = false
       }
       return false
-    }
-  }
-
-  checkCollisionDirection(object1, object2) {
-    const vectorX =
-      object1.x + object1.width / 2 - (object2.x + object2.width / 2)
-    const vectorY =
-      object1.y + object1.height / 2 - (object2.y + object2.height / 2)
-
-    const halfWidths = object1.width / 2 + object2.width / 2
-    const halfHeights = object1.height / 2 + object2.height / 2
-
-    if (Math.abs(vectorX) < halfWidths && Math.abs(vectorY) < halfHeights) {
-      const offsetX = halfWidths - Math.abs(vectorX)
-      const offsetY = halfHeights - Math.abs(vectorY)
-      if (offsetX >= offsetY) {
-        if (vectorY > 0) {
-          return 'top'
-        } else {
-          return 'bottom'
-        }
-      } else {
-        if (vectorX > 0) {
-          return 'left'
-        } else {
-          return 'right'
-        }
-      }
     }
   }
 }
