@@ -7,7 +7,7 @@ export default class Player {
     this.width = 78
     this.height = 58
     this.x = 50
-    this.y = 100
+    this.y = 350
 
     this.frameX = 0
 
