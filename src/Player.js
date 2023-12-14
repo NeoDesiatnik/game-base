@@ -96,9 +96,6 @@ export default class Player {
   }
 
   draw(context) {
-    context.fillStyle = '#f00'
-    context.fillRect(this.x, this.y, this.width, this.height)
-
     this.projectiles.forEach((projectile) => {
       projectile.draw(context)
     })
