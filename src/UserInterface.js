@@ -57,16 +57,16 @@ export default class UserInterface {
         this.game.width - 20,
         225
       )
-      context.fillText(
-        `cameraX: ${this.game.camera.x.toFixed(2)}`,
-        this.game.width - 20,
-        250
-      )
-      context.fillText(
-        `cameraY: ${this.game.camera.y.toFixed(2)}`,
-        this.game.width - 20,
-        275
-      )
+      // context.fillText(
+      //   `cameraX: ${this.game.camera.x.toFixed(2)}`,
+      //   this.game.width - 20,
+      //   250
+      // )
+      // context.fillText(
+      //   `cameraY: ${this.game.camera.y.toFixed(2)}`,
+      //   this.game.width - 20,
+      //   275
+      // )
       context.fillText(`keys: ${this.game.keys}`, this.game.width - 20, 150)
     }
 

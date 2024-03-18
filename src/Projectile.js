@@ -1,28 +1,25 @@
 export default class Projectile {
-  constructor(game, x, y, direction) {
+  constructor(game, x, y) {
     this.game = game
-    this.width = 20
-    this.height = 8
+    this.width = 14
+    this.height = 6
     this.x = x
     this.y = y
-    this.direction = direction
 
-    this.speed = 30
+    this.speed = 15
     this.damage = 1
     this.markedForDeletion = false
   }
 
   update() {
-    this.x += this.speed * this.direction
-    if (this.x > this.game.width + this.game.camera.x) {
-      this.markedForDeletion = true
-    } else if (this.x < this.game.camera.x) {
+    this.x += this.speed
+    if (this.x > this.game.width) {
       this.markedForDeletion = true
     }
   }
 
   draw(context) {
-    context.fillStyle = 'rgb(255,255,255)'
+    context.fillStyle = '#ff0'
     context.fillRect(this.x, this.y, this.width, this.height)
   }
 }

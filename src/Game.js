@@ -20,7 +20,7 @@ export default class Game {
 
     this.enemies = []
     this.enemyTimer = 0
-    this.enemyInterval = 1000
+    this.enemyInterval = 2718
 
     this.player = new Player(this)
 
@@ -90,7 +90,9 @@ export default class Game {
   }
 
   addEnemy() {
-    this.enemies.push(new Slime(this))
+    const slime = new Slime(this)
+    console.log(slime)
+    this.enemies.push(slime)
   }
 
   checkCollision(object1, object2) {

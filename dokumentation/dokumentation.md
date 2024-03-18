@@ -27,3 +27,5 @@
 
 * Dåligt med uppgiften
     Estetarna jag hamnade med verkade väldigt omotiverade och det gjorde att jag också tappade motivation.
+
+14/03/24 - Fixade enemy spawning

@@ -17,7 +17,7 @@ export default class InputHandler {
         this.game.keys.push(event.key)
       }
 
-      if (event.key === '´') {
+      if (event.key === ' ') {
         this.game.player.shoot()
       }
 

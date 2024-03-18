@@ -12,7 +12,7 @@ export default class Background {
     this.skyLayer = new Layer(this.game, sky, 1708, 500, 0.2)
     const middle = new Image()
     middle.src = middleImage
-    this.middleLayer = new Layer(this.game, middle, 1708, 500, 0.4)
+    this.middleLayer = new Layer(this.game, middle, 3000, 500, 0.4)
     const ground = new Image()
     ground.src = groundImage
     this.groundLayer = new Layer(this.game, ground, 1708, 500, 0.6)
