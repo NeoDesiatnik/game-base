@@ -4,8 +4,8 @@ import spriteImage from './assets/sprites/IdleRun.png'
 export default class Player {
   constructor(game) {
     this.game = game
-    this.width = 78
-    this.height = 58
+    this.width = 35
+    this.height = 45
     this.x = 50
     this.y = 350
 
@@ -29,7 +29,7 @@ export default class Player {
     this.frameX = 0
     this.frameY = 1
     this.maxFrame = 8
-    this.fps = 20
+    this.fps = 0
     this.timer = 0
     this.interval = 1000 / this.fps
 
@@ -97,6 +97,8 @@ export default class Player {
 
   draw(context) {
     this.projectiles.forEach((projectile) => {
+
+      // if flip rita fråmn en postion, annars bla
       projectile.draw(context)
     })
 
@@ -123,7 +125,7 @@ export default class Player {
     context.drawImage(
       this.image,
       this.frameX * this.width,
-      this.frameY * this.height - 14,
+      this.frameY * this.height -50,
       this.width,
       this.height,
       this.flip ? this.x * -1 - this.width : this.x,

@@ -7,92 +7,94 @@ import Background from './Background.js'
 
 export default class Game {
   constructor(width, height) {
-    this.width = width
-    this.height = height
-    this.input = new InputHandler(this)
-    this.ui = new UserInterface(this)
-    this.background = new Background(this)
-    this.keys = []
-    this.gameOver = false
-    this.gravity = 1
-    this.debug = false
-    this.gameTime = 0
+    this.width = width;
+    this.height = height;
+    this.input = new InputHandler(this);
+    this.ui = new UserInterface(this);
+    this.background = new Background(this);
+    this.keys = [];
+    this.gameOver = false;
+    this.gravity = 1;
+    this.debug = false;
+    this.gameTime = 0;
+    this.enemies = [];
+    this.enemyTimer = 0;
+    this.enemyInterval = 4000;
+    this.enemyIntervalDecreaseRate = 10;
 
-    this.enemies = []
-    this.enemyTimer = 0
-    this.enemyInterval = 2718
+    this.player = new Player(this);
 
-    this.player = new Player(this)
-
-    this.ground = this.height - 82
+    this.ground = this.height - 82;
 
     this.platforms = [
       new Platform(this, 0, this.ground, this.width, 100, 'transparent'),
       new Platform(this, this.width - 200, 280, 200, 20, '#795548'),
       new Platform(this, 200, 200, 300, 20, '#795548'),
-    ]
+    ];
 
-    this.speed = 1
+    this.speed = 1;
   }
 
   update(deltaTime) {
     if (!this.gameOver) {
-      this.gameTime += deltaTime
+      this.gameTime += deltaTime;
     }
 
-    this.background.update()
-    // this.background.layers[3].update()
+    this.background.update();
 
-    this.player.update(deltaTime)
+    this.player.update(deltaTime);
 
     this.platforms.forEach((platform) => {
       if (this.checkPlatformCollision(this.player, platform)) {
-        this.player.speedY = 0
-        this.player.y = platform.y - this.player.height
-        this.player.grounded = true
+        this.player.speedY = 0;
+        this.player.y = platform.y - this.player.height;
+        this.player.grounded = true;
       }
       this.enemies.forEach((enemy) => {
         if (this.checkPlatformCollision(enemy, platform)) {
-          enemy.speedY = 0
-          enemy.y = platform.y - enemy.height
+          enemy.speedY = 0;
+          enemy.y = platform.y - enemy.height;
         }
-      })
-    })
+      });
+    });
 
-    if (this.enemyTimer > this.enemyInterval && !this.gameOver) {
-      this.addEnemy()
-      this.enemyTimer = 0
-    } else {
-      this.enemyTimer += deltaTime
+    this.enemyTimer += deltaTime;
+
+    if (this.enemyTimer > this.enemyInterval && !this.gameOver && this.enemyTimer >= 500) {
+      this.addEnemy();
+      this.enemyTimer = 0;
+      this.enemyInterval -= this.enemyIntervalDecreaseRate
+      this.enemyIntervalDecreaseRate = this.enemyIntervalDecreaseRate *3
+      console.log(this.enemyInterval)
     }
 
     this.enemies.forEach((enemy) => {
-      enemy.update(deltaTime)
+      enemy.update(deltaTime);
       if (this.checkCollision(this.player, enemy)) {
-        enemy.markedForDeletion = true
+        enemy.markedForDeletion = true;
       }
       this.player.projectiles.forEach((projectile) => {
         if (this.checkCollision(projectile, enemy)) {
-          enemy.markedForDeletion = true
-          projectile.markedForDeletion = true
+          enemy.markedForDeletion = true;
+          projectile.markedForDeletion = true;
         }
-      })
-    })
-    this.enemies = this.enemies.filter((enemy) => !enemy.markedForDeletion)
+      });
+    });
+    this.enemies = this.enemies.filter((enemy) => !enemy.markedForDeletion);
   }
 
   draw(context) {
-    this.background.draw(context)
-    this.ui.draw(context)
-    this.platforms.forEach((platform) => platform.draw(context))
-    this.player.draw(context)
-    this.enemies.forEach((enemy) => enemy.draw(context))
+    this.background.draw(context);
+    this.ui.draw(context);
+    this.platforms.forEach((platform) => platform.draw(context));
+    this.player.draw(context);
+    this.enemies.forEach((enemy) => enemy.draw(context));
   }
 
   addEnemy() {
-    const slime = new Slime(this)
-    console.log(slime)
-    this.enemies.push(slime)
+    const slime = new Slime(this);
+    console.log(slime);
+    this.enemies.push(slime);
   }
 
   checkCollision(object1, object2) {
@@ -101,7 +103,7 @@ export default class Game {
       object1.x + object1.width > object2.x &&
       object1.y < object2.y + object2.height &&
       object1.height + object1.y > object2.y
-    )
+    );
   }
 
   checkPlatformCollision(object, platform) {
@@ -112,16 +114,16 @@ export default class Game {
       object.x <= platform.x + platform.width
     ) {
       if (object.grounded && object.y + object.height > platform.y) {
-        object.speedY = 0
-        object.y = platform.y - object.height
-        object.grounded = true
+        object.speedY = 0;
+        object.y = platform.y - object.height;
+        object.grounded = true;
       }
-      return true
+      return true;
     } else {
       if (object.grounded && object.y + object.height < platform.y) {
-        object.grounded = false
+        object.grounded = false;
       }
-      return false
+      return false;
     }
   }
 }

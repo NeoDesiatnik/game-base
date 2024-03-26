@@ -28,4 +28,13 @@
 * Dåligt med uppgiften
     Estetarna jag hamnade med verkade väldigt omotiverade och det gjorde att jag också tappade motivation.
 
-14/03/24 - Fixade enemy spawning
+14/03/24 - Fixade enemy spawning.
+
+19/03/24 - gjorde så att man kan skjuta, nästa gång ska jag fixa så att den skjuter åt hållet man kollar mot.
+
+26/03/24 -  Lade till cooldown på att skjuta. 
+            Fiender spawnar nu snabbare och snabbare. 
+            Man har melee attacker istället för skott nu.
+            Ändrade sprite
+            !! Behöver fixa direction på slaget
+            

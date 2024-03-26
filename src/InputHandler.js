@@ -1,8 +1,10 @@
 export default class InputHandler {
   constructor(game) {
-    this.game = game
+    this.game = game;
+    this.shootCooldown = 150;
+    this.lastShootTime = 0;
+
     window.addEventListener('keydown', (event) => {
-      // console.log(event.key)
       if (
         (event.key === 'ArrowUp' ||
           event.key === 'ArrowDown' ||
@@ -14,25 +16,30 @@ export default class InputHandler {
           event.key === 'd' ) &&
         this.game.keys.indexOf(event.key) === -1
       ) {
-        this.game.keys.push(event.key)
+        this.game.keys.push(event.key);
       }
 
       if (event.key === ' ') {
-        this.game.player.shoot()
+        const currentTime = Date.now();
+        if (currentTime - this.lastShootTime > this.shootCooldown) {
+          this.game.player.shoot();
+          this.lastShootTime = currentTime;
+        }
       }
 
       if (event.key === 'i') {
-        this.game.debug = !this.game.debug
+        this.game.debug = !this.game.debug;
       }
 
       if (event.key === 'p') {
-        this.game.pause = !this.game.pause
+        this.game.pause = !this.game.pause;
       }
-    })
+    });
+
     window.addEventListener('keyup', (event) => {
       if (this.game.keys.indexOf(event.key) > -1) {
-        this.game.keys.splice(this.game.keys.indexOf(event.key), 1)
+        this.game.keys.splice(this.game.keys.indexOf(event.key), 1);
       }
-    })
+    });
   }
 }
